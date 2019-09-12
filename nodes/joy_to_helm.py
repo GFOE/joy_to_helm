@@ -6,7 +6,7 @@ from marine_msgs.msg import Helm
 from std_msgs.msg import String
 
 helm_publisher = None
-helm_mode_publisher = None
+piloting_mode_publisher = None
 state = 'standby'
 
 def joystickCallback(msg):
@@ -20,7 +20,7 @@ def joystickCallback(msg):
     if msg.buttons[2]:
         state_request = 'standby'
     if state_request is not None and state_request != state:
-        helm_mode_publisher.publish('helm_mode '+state_request)
+        piloting_mode_publisher.publish('piloting_mode '+state_request)
         state = state_request
     
     if state == 'manual':
@@ -33,7 +33,7 @@ def joystickCallback(msg):
 if __name__ == '__main__':
     rospy.init_node('joy_to_helm')
     helm_publisher = rospy.Publisher('/udp/helm', Helm, queue_size=10)
-    helm_mode_publisher = rospy.Publisher('/send_command', String, queue_size=10)
+    piloting_mode_publisher = rospy.Publisher('/send_command', String, queue_size=10)
     joy_subscriber = rospy.Subscriber('/joy', Joy, joystickCallback)
     rospy.spin()
     
