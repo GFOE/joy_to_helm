@@ -3,11 +3,19 @@
 import rospy
 from sensor_msgs.msg import Joy
 from marine_msgs.msg import Helm
+from marine_msgs.msg import Heartbeat
 from std_msgs.msg import String
 
 helm_publisher = None
 piloting_mode_publisher = None
 state = 'standby'
+
+def heartbeatCallback(msg):
+    global state
+    for kv in msg.values:
+        if kv.key == 'piloting_mode':
+            state = kv.value
+    
 
 def joystickCallback(msg):
     global state
@@ -35,5 +43,6 @@ if __name__ == '__main__':
     helm_publisher = rospy.Publisher('/udp/helm', Helm, queue_size=10)
     piloting_mode_publisher = rospy.Publisher('/send_command', String, queue_size=10)
     joy_subscriber = rospy.Subscriber('/joy', Joy, joystickCallback)
+    heartbeat_subscriber = rospy.Subscriber('/udp/heartbeat', Heartbeat, heartbeatCallback)
     rospy.spin()
     
