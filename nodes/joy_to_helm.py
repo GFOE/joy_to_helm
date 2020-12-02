@@ -61,11 +61,11 @@ if __name__ == '__main__':
     allow_differential_drive = rospy.get_param('allow_differential_drive', False)
     print 'allow_differential_drive:',allow_differential_drive
     
-    helm_publisher = rospy.Publisher('/udp/helm', Helm, queue_size=10)
-    dd_publisher = rospy.Publisher('/udp/differential_drive', DifferentialDrive, queue_size=10)
+    helm_publisher = rospy.Publisher('/helm', Helm, queue_size=10)
+    dd_publisher = rospy.Publisher('/differential_drive', DifferentialDrive, queue_size=10)
     
     piloting_mode_publisher = rospy.Publisher('/send_command', String, queue_size=10)
     joy_subscriber = rospy.Subscriber('/joy', Joy, joystickCallback)
-    heartbeat_subscriber = rospy.Subscriber('/udp/heartbeat', Heartbeat, heartbeatCallback)
+    heartbeat_subscriber = rospy.Subscriber('/heartbeat', Heartbeat, heartbeatCallback)
     rospy.spin()
     
