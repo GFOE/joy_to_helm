@@ -34,10 +34,10 @@ def joystickCallback(msg):
         state_request = 'standby'
     if msg.buttons[9]:
         drive_mode = 'helm'
-        print 'drive_mode',drive_mode
+        print ('drive_mode',drive_mode)
     if msg.buttons[10] and allow_differential_drive:
         drive_mode = 'differential'
-        print 'drive_mode',drive_mode
+        print ('drive_mode',drive_mode)
     if state_request is not None and state_request != state:
         piloting_mode_publisher.publish('piloting_mode '+state_request)
         state = state_request
@@ -59,7 +59,7 @@ def joystickCallback(msg):
 if __name__ == '__main__':
     rospy.init_node('joy_to_helm')
     allow_differential_drive = rospy.get_param('allow_differential_drive', False)
-    print 'allow_differential_drive:',allow_differential_drive
+    print ('allow_differential_drive:',allow_differential_drive)
     
     helm_publisher = rospy.Publisher('/helm', Helm, queue_size=10)
     dd_publisher = rospy.Publisher('/differential_drive', DifferentialDrive, queue_size=10)
