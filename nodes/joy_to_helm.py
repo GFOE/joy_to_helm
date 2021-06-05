@@ -44,9 +44,12 @@ def joystickCallback(msg):
     
     if state == 'manual':
         if drive_mode == 'helm':
+            limit_factor = 1.0
+            if msg.axes[2] < 0:
+                limit_factor = 0.5
             helm = Helm()
             helm.header.stamp = rospy.Time.now()
-            helm.throttle = msg.axes[1]
+            helm.throttle = msg.axes[1]*limit_factor
             helm.rudder = -msg.axes[3]
             helm_publisher.publish(helm)
         if drive_mode == 'differential':
