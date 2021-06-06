@@ -14,6 +14,16 @@ state = 'standby'
 drive_mode = 'helm'
 allow_differential_drive = False
 
+throttle_axis = 1
+slow_mode_axis = 2
+rudder_axis = 3
+
+manual_button = 0
+autonomous_button = 2
+standby_button = 1
+
+
+
 def heartbeatCallback(msg):
     global state
     for kv in msg.values:
@@ -26,11 +36,11 @@ def joystickCallback(msg):
     global drive_mode
 
     state_request = None
-    if msg.buttons[0]:
+    if msg.buttons[manual_button]:
         state_request = 'manual'
-    if msg.buttons[1]:
+    if msg.buttons[autonomous_button]:
         state_request = 'autonomous'
-    if msg.buttons[2]:
+    if msg.buttons[standby_button]:
         state_request = 'standby'
     if msg.buttons[9]:
         drive_mode = 'helm'
@@ -45,12 +55,12 @@ def joystickCallback(msg):
     if state == 'manual':
         if drive_mode == 'helm':
             limit_factor = 1.0
-            if msg.axes[2] < 0:
+            if msg.axes[slow_mode_axis] < 0:
                 limit_factor = 0.35
             helm = Helm()
             helm.header.stamp = rospy.Time.now()
-            helm.throttle = msg.axes[1]*limit_factor
-            helm.rudder = -msg.axes[3]
+            helm.throttle = msg.axes[throttle_axis]*limit_factor
+            helm.rudder = -msg.axes[rudder_axis]
             helm_publisher.publish(helm)
         if drive_mode == 'differential':
             d = DifferentialDrive()
@@ -63,6 +73,21 @@ if __name__ == '__main__':
     rospy.init_node('joy_to_helm')
     allow_differential_drive = rospy.get_param('allow_differential_drive', False)
     print ('allow_differential_drive:',allow_differential_drive)
+
+    throttle_axis = rospy.get_param('~throttle_axis', throttle_axis)
+    slow_mode_axis = rospy.get_param('~slow_mode_axis', slow_mode_axis)
+    rudder_axis = rospy.get_param('~rudder_axis', rudder_axis)
+
+    manual_button = rospy.get_param('~manual_button', manual_button)
+    autonomous_button = rospy.get_param('~autonomous_button', autonomous_button)
+    standby_button = rospy.get_param('~standby_button', standby_button)
+
+    print('throttle_axis', throttle_axis)
+    print('rudder_axis', rudder_axis)
+    print('slow_mode_axis', slow_mode_axis)
+    print('manual_button', manual_button)
+    print('autonomous_button', autonomous_button)
+    print('standby_button', standby_button)
     
     helm_publisher = rospy.Publisher('helm', Helm, queue_size=10)
     if allow_differential_drive:
