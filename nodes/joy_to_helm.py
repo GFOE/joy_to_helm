@@ -54,9 +54,9 @@ def joystickCallback(msg):
     
     if state == 'manual':
         if drive_mode == 'helm':
-            limit_factor = 1.0
+            limit_factor = 0.35
             if msg.axes[slow_mode_axis] < 0:
-                limit_factor = 0.35
+                limit_factor = 1.0
             helm = Helm()
             helm.header.stamp = rospy.Time.now()
             helm.throttle = msg.axes[throttle_axis]*limit_factor
