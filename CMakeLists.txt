@@ -4,7 +4,7 @@ project(joy_to_helm)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
-  marine_msgs
+  project11_msgs
 )
 
 catkin_python_setup()

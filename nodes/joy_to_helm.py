@@ -2,9 +2,9 @@
 
 import rospy
 from sensor_msgs.msg import Joy
-from marine_msgs.msg import Helm
-from marine_msgs.msg import DifferentialDrive
-from marine_msgs.msg import Heartbeat
+from project11_msgs.msg import Helm
+from project11_msgs.msg import DifferentialDrive
+from project11_msgs.msg import Heartbeat
 from std_msgs.msg import String
 
 helm_publisher = None
